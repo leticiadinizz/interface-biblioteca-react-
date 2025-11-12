@@ -47,7 +47,7 @@ class AuthRequests {
             // verifica se o atributo auth da resposta tem o valor TRUE, se tiver é porque a autenticação teve sucesso
             if (data.auth) {
                 // persistem o token, o nome e o id do professor no localstorage
-                this.persistToken(data.token, data.usuario.nome, data.usuario.id_usuario, data.auth);
+                this.persistToken(data.token, data.usuario.nome, data.usuario.id_usuario, data.auth, data.usuario.imagemPerfil);
             }
 
             // retorna a resposta da requisição a quem chamou a função
@@ -65,7 +65,7 @@ class AuthRequests {
      * @param {*} username - nome usuário recebido do servidor
      * @param {*} idUsuario - idUsuario recebido do servidor
      */
-    persistToken(token: string, username: string, idUsuario: number, isAuth: boolean) {
+    persistToken(token: string, username: string, idUsuario: number, isAuth: boolean, imagemPerfil: string) {
         // adiciona o token no localstorade com o apelido de token
         localStorage.setItem('token', token);  // -> armazena o token no localStorage e coloca o 'apelido' de token
         // adiciona o nome de usuário no localstorade com o apelido de username
@@ -74,6 +74,8 @@ class AuthRequests {
         localStorage.setItem('idUsuario', idUsuario.toString());  // -> armazena o idPessoa no localStorage e coloca o 'apelido' de idPessoa
         // adiciona o valor de autenticação no localstorade com o apelido de isAuth
         localStorage.setItem('isAuth', isAuth.toString());  // -> armazena o estado da autenticação (true, false) no localStorage e coloca o 'apelido' de isAuth
+        
+        localStorage.setItem('imagemPerfil', imagemPerfil);
     }
 
     /**
@@ -88,6 +90,9 @@ class AuthRequests {
         localStorage.removeItem('idUsuario');  // -> remove o 'apelido' de idPessoa do localStorage
         // remove o isAuth do localstorage
         localStorage.removeItem('isAuth');  // -> remove o 'apelido' de isAuth do localStorage
+
+        localStorage.removeItem('imagemPerfil');
+        
         // redireciona o usuário para a página de login
         window.location.href = `${APP_ROUTES.ROUTE_LOGIN}`;
     }

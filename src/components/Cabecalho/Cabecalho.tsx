@@ -10,19 +10,22 @@ import estilo from './Cabecalho.module.css';
 import logotipo from '../../assets/logotipo.png';
 
 // Importa as rotas da aplicação definidas no arquivo de configuração
-import { APP_ROUTES } from '../../appConfig';
+import { APP_ROUTES, SERVER_CFG } from '../../appConfig';
 
 // Declara o componente funcional Cabecalho que retorna um elemento JSX
 function Cabecalho(): JSX.Element {
     // estado para controlar a renderização condicional
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [imagemPerfil, setImagemPerfil] = useState('');
 
     useEffect(() => {
         const isAuth: boolean = localStorage.getItem('isAuth') === 'true'; // recupera o valor isAuth do localStorage e converte em um boolean
         const token: string | null = localStorage.getItem('token'); // recupera o valor do token do localStorage
+        const imagem: string | null = localStorage.getItem('imagemPerfil');
         // verifica se isAuth é verdadeiro, se o token não é nulo e se o token não está expirado
         if (isAuth && token && AuthRequests.checkTokenExpiry()) {
             setIsAuthenticated(true); // define o estado para verdadeiro
+            setImagemPerfil(imagem ? imagem: '');
         } else {
             setIsAuthenticated(false); // define o estado para falso
         }
@@ -48,6 +51,16 @@ function Cabecalho(): JSX.Element {
 
                     {/* Link para navegar até a listagem de empréstimos */}
                     <a href={APP_ROUTES.ROUTE_LISTAGEM_EMPRESTIMOS}>Empréstimos</a>
+
+                    <img
+                    src={`${SERVER_CFG.SERVER_URL}/uploads/${imagemPerfil}`}
+                    alt='Imagem de perfil'
+                    style={{
+                        width: '5 rem',
+                        height: '5rem',
+                        borderRadius: '50%'
+                    }}
+                    />
 
                     {/* Link para navegar até a página de login */}
                     <Button
